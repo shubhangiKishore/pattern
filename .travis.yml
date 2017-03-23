@@ -13,6 +13,7 @@ matrix:
         - python: "pypy"
 
 install:
+    - pip install --upgrade --pre setuptools
     - if [ "$TRAVIS_PYTHON_VERSION" == "2.6" ]; then pip install unittest2; fi
     - pip install future
     - python setup.py install --quiet
