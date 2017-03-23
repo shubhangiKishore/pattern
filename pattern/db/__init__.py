@@ -25,6 +25,7 @@ from calendar import monthrange
 from time import mktime, strftime
 from math import sqrt
 from types import GeneratorType
+from functools import cmp_to_key
 
 try:  # Python 2.x vs 3.x
     from cStringIO import StringIO
@@ -528,7 +529,7 @@ def order(list, cmp=None, key=None, reverse=False):
         f = lambda i, j: int(key(list[i]) >= key(list[j])) * 2 - 1
     else:
         f = lambda i, j: int(list[i] >= list[j]) * 2 - 1
-    return sorted(range(len(list)), cmp=f, reverse=reverse)
+    return sorted(range(len(list)), key=cmp_to_key(f), reverse=reverse)
 
 _order = order
 
@@ -2539,7 +2540,8 @@ class Datasheet(CSV):
         if columns == ALL:
             return Datasheet(rows=(self.rows[i] for i in rows))
         z = zip(*(self.columns[j] for j in columns))
-        return Datasheet(rows=(z[i] for i in rows))
+        z_list = list(z)
+        return Datasheet(rows=(z_list[i] for i in rows))
 
     @property
     def array(self):
