@@ -1272,7 +1272,7 @@ class Table(object):
         q = " and ".join(cmp(k, v, "=", self.db.escape)
                          for k, v in kwargs.items())
         q = q and " where %s" % q or ""
-        q = "select %s from `%s`%s;" % (fields, self.name, q)
+        q = "select %s from '%s'%s;" % (fields, self.name, q)
         return self.Rows(self, self.db.execute(q))
 
     def find(self, *args, **kwargs):
@@ -1307,9 +1307,9 @@ class Table(object):
                 zip((f for f in self.fields if f != self.pk), args[0]))
         if len(self.default) > 0:
             kwargs.update(self.default)
-        k = ", ".join("`%s`" % k for k in kwargs.keys())
-        v = ", ".join(self.db.escape(v) for v in kwargs.values())
-        q = "insert into `%s` (%s) values (%s);" % (self.name, k, v)
+        k = ", ".join("'%s'" % k for k in kwargs.keys())
+        v = ", ".join("'%s'" % str(v) for v in kwargs.values())
+        q = "insert into %s (%s) values (%s);" % (self.name, k, v)
         self.db.execute(q, commit)
         return self._insert_id()
 
