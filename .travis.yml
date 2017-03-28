@@ -1,18 +1,19 @@
 language: python
 
 python:
-    - "2.6"
-    - "2.7"
     - "pypy"
     - "3.3"
     - "3.4"
+    - "3.6"
 
 matrix:
     allow_failures:
         - python: "3.3"
         - python: "pypy"
+        - python: "3.6"
 
 install:
+    - pip install --upgrade --pre setuptools
     - if [ "$TRAVIS_PYTHON_VERSION" == "2.6" ]; then pip install unittest2; fi
     - pip install future
     - python setup.py install --quiet
